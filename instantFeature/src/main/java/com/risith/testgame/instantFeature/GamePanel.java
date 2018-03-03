@@ -26,11 +26,22 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
         this.surfaceHolder = getHolder();
 
+        thread = new MainThread(surfaceHolder,this);
+        player = new RectPlayer(new Rect(100,200,200,100), Color.rgb(0,0,255));
+        playerPoint = new Point(150,150);
+        setFocusable(true);
+
+        System.out.println(getHolder());
+        System.out.println(surfaceHolder);
+    }
+
+    private void canvasColor(int color) {
         try{
             this.canvas = this.surfaceHolder.lockCanvas();
             synchronized (surfaceHolder){
                 super.draw(canvas);
-                canvas.drawColor(Color.GREEN);
+                canvas.drawColor(Color.YELLOW);
+                System.out.println("canvasColor runned");
             }
         }catch (Exception e){e.printStackTrace();
         }finally {
@@ -40,31 +51,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }catch (Exception e){e.printStackTrace();}
             }
         }
-
-
-
-
-
-
-
-        thread = new MainThread(getHolder(),this);
-        player = new RectPlayer(new Rect(100,200,200,100), Color.rgb(0,0,255));
-        playerPoint = new Point(150,150);
-        setFocusable(true);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        thread = new MainThread(getHolder(), this);
+        System.out.println("surfaceCreated");
+        canvasColor(Color.GREEN);
+        thread = new MainThread(surfaceHolder, this);
         //thread.getSurfaceHolder().lockCanvas().drawColor(Color.GREEN);
         thread.setRunning(true);
         thread.start();
+
         //---------------------------------------------------------//
-        /*super.draw(thread.getCanvas());
+
+        /*
+        super.draw(thread.getCanvas());
         thread.getCanvas().drawColor(Color.GREEN);
-        getHolder().unlockCanvasAndPost(thread.getCanvas());*/
-
-
+        getHolder().unlockCanvasAndPost(thread.getCanvas());
+        */
 
     }
 

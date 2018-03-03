@@ -48,7 +48,7 @@ public class MainThread extends Thread {
                 synchronized (surfaceHolder){
                     this.gamePanel.update();
                     this.gamePanel.draw(canvas);
-                    System.out.println("Main Thread");
+                    //System.out.println("Main Thread");
                 }
             }catch (Exception e){e.printStackTrace();
             }finally {
@@ -57,7 +57,9 @@ public class MainThread extends Thread {
                         surfaceHolder.unlockCanvasAndPost(canvas);
                     }catch (Exception e){e.printStackTrace();}
                 }
-            }timeMills = (System.nanoTime()-startTime)/1000000;
+            }
+
+            timeMills = (System.nanoTime()-startTime)/1000000;
             waitTime = targetTime-timeMills;
 
             try{
@@ -74,7 +76,7 @@ public class MainThread extends Thread {
                 averageFPS = 1000/((totalTime/frameCount)/1000000);
                 frameCount = 0;
                 totalTime = 0;
-                System.out.println(averageFPS);
+                //System.out.println(averageFPS);
             }
         }
     }
