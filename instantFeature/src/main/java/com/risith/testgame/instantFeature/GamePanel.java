@@ -1,6 +1,7 @@
 package com.risith.testgame.instantFeature;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -20,10 +21,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Point playerPoint;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
+    private boolean isInitialized = true;
 
     public GamePanel(Context context) {
         super(context);
         getHolder().addCallback(this);
+        isInitialized = true;
         this.surfaceHolder = getHolder();
 
         thread = new MainThread(surfaceHolder,this);
@@ -31,7 +34,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         playerPoint = new Point(150,150);
         setFocusable(true);
 
-        System.out.println(getHolder());
+        System.out.println("RR: "+getHolder());
         System.out.println(surfaceHolder);
     }
 
@@ -39,9 +42,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         try{
             this.canvas = this.surfaceHolder.lockCanvas();
             synchronized (surfaceHolder){
-                super.draw(canvas);
-                canvas.drawColor(Color.YELLOW);
-                System.out.println("canvasColor runned");
+                //onDraw(canvas);
             }
         }catch (Exception e){e.printStackTrace();
         }finally {
@@ -56,20 +57,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         System.out.println("surfaceCreated");
-        canvasColor(Color.GREEN);
+        //canvasColor(Color.GREEN);
+
         thread = new MainThread(surfaceHolder, this);
-        //thread.getSurfaceHolder().lockCanvas().drawColor(Color.GREEN);
         thread.setRunning(true);
         thread.start();
-
-        //---------------------------------------------------------//
-
-        /*
-        super.draw(thread.getCanvas());
-        thread.getCanvas().drawColor(Color.GREEN);
-        getHolder().unlockCanvasAndPost(thread.getCanvas());
-        */
-
     }
 
     @Override
@@ -100,9 +92,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         //return super.onTouchEvent(event);
     }
 
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        //canvas.setBitmap();
+        if(isInitialized){
+            canvas.drawColor(Color.YELLOW);
+            System.out.println("yellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+            isInitialized = false;
+        }
         player.draw(canvas);
         //System.out.println("draw game panel: "+color);
     }
