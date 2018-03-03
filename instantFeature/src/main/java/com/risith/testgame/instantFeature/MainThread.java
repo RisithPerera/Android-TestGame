@@ -22,6 +22,10 @@ public class MainThread extends Thread {
         this.gamePanel = gamePanel;
     }
 
+    public Canvas getCanvas(){
+        return canvas;
+    }
+
     public void setRunning(boolean running){
         this.running =  running;
     }
@@ -44,6 +48,7 @@ public class MainThread extends Thread {
                 synchronized (surfaceHolder){
                     this.gamePanel.update();
                     this.gamePanel.draw(canvas);
+                    System.out.println("Main Thread");
                 }
             }catch (Exception e){e.printStackTrace();
             }finally {
