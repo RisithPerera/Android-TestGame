@@ -40,7 +40,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             this.canvas = this.surfaceHolder.lockCanvas();
             synchronized (surfaceHolder){
                 super.draw(canvas);
-                canvas.drawColor(Color.YELLOW);
+                canvas.drawColor(color);
                 System.out.println("canvasColor runned");
             }
         }catch (Exception e){e.printStackTrace();
