@@ -3,6 +3,7 @@ package com.risith.testgame.instantFeature;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.MotionEvent;
@@ -16,18 +17,18 @@ import android.view.SurfaceView;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
-    private RectPlayer player;
-    private Point playerPoint;
+    private SceneManager manager;
 
     public GamePanel(Context context) {
         super(context);
         getHolder().addCallback(this);
-
+        Constant.CURRENT_CONTEXT = context;
         thread = new MainThread(getHolder(), this);
-        player = new RectPlayer(new Rect(100, 200, 200, 100), Color.rgb(0, 0, 255));
-        playerPoint = new Point(150, 150);
+        manager = new SceneManager();
         setFocusable(true);
     }
+
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -57,25 +58,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                playerPoint.set((int) event.getX(), (int) event.getY());
-        }
+        manager.receiveTouch(event);
         return true;
-        //return super.onTouchEvent(event);
     }
 
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawColor(Color.WHITE);
-        player.draw(canvas);
+        manager.draw(canvas);
         //System.out.println("draw game panel: "+color);
     }
 
+
+
     public void update() {
-        player.update(playerPoint);
+        manager.update();
     }
 }
