@@ -11,4 +11,6 @@ public class Constant {
     public static int SCREEN_HEIGHT;
 
     public static Context CURRENT_CONTEXT;
+
+    public static long INIT_TIME;
 }

@@ -63,6 +63,9 @@ public class ObstacleManager {
     }
 
     public void update(){
+        if(startTime < Constant.INIT_TIME){
+            startTime = Constant.INIT_TIME;
+        }
         int elapsedTime = (int)(System.currentTimeMillis() - startTime);
 
         startTime = System.currentTimeMillis();

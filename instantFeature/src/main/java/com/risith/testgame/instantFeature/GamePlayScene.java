@@ -25,12 +25,18 @@ public class GamePlayScene implements Scene {
 
     private long gameOverTime;
 
+    private  OrientationData orientationData;
+    private long frameTime;
+
     public GamePlayScene(){
         player = new RectPlayer(new Rect(0, 0, 100, 100), Color.rgb(0, 0, 255));
         playerPoint = new Point(Constant.SCREEN_WIDTH/2,3*Constant.SCREEN_HEIGHT/4);
         player.update(playerPoint);
 
         obstacleManager = new ObstacleManager(200,350,75,Color.BLACK);
+        orientationData = new OrientationData();
+        orientationData.register();
+        frameTime = System.currentTimeMillis();
     }
 
     @Override
@@ -48,6 +54,7 @@ public class GamePlayScene implements Scene {
                 if(gameOver && System.currentTimeMillis() - gameOverTime >= 2000){
                     reset();
                     gameOver = false;
+                    orientationData.newGame();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -64,6 +71,35 @@ public class GamePlayScene implements Scene {
     @Override
     public void update() {
         if(!gameOver){
+            if(frameTime<Constant.INIT_TIME){
+                frameTime = Constant.INIT_TIME;
+            }
+            int elapsedTime = (int) (System.currentTimeMillis()-frameTime);
+            frameTime = System.currentTimeMillis();
+            if(orientationData.getOrientation() != null && orientationData.getStartOrientation() != null){
+                float pitch = orientationData.getOrientation()[1]-orientationData.getStartOrientation()[1];
+                float roll = orientationData.getOrientation()[2]-orientationData.getStartOrientation()[2];
+
+                float xSpeed = roll * Constant.SCREEN_WIDTH/1000;
+                float ySpeed = pitch * Constant.SCREEN_HEIGHT/1000;
+
+                playerPoint.x += Math.abs(xSpeed*elapsedTime) > 5 ? xSpeed*elapsedTime : 0;
+                playerPoint.y += Math.abs(ySpeed*elapsedTime) > 5 ? ySpeed*elapsedTime : 0;
+
+            }
+
+            if(playerPoint.x<0){
+                playerPoint.x = 0;
+            }else if(playerPoint.x> Constant.SCREEN_WIDTH){
+                playerPoint.x = Constant.SCREEN_WIDTH;
+            }
+
+            if(playerPoint.y<0){
+                playerPoint.y = 0;
+            }else if(playerPoint.y> Constant.SCREEN_HEIGHT){
+                playerPoint.y = Constant.SCREEN_HEIGHT;
+            }
+
             player.update(playerPoint);
             obstacleManager.update();
             if(obstacleManager.playerCollide(player)){

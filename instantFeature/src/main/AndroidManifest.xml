@@ -4,9 +4,10 @@
 
     <application>
         <activity android:name=".MainActivity">
-            <intent-filter android:order="1">
+            android:screen
+            <intent-filter android:order="1"
+                android:screenOrientation = "portrait">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
